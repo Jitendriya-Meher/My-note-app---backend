@@ -105,16 +105,6 @@ const editProfile = async (req, res) => {
         const userID = req.userID;
         const {username, email} = req.body;
 
-        const exitUser = await User.findOne({email});
-        const currUser = await User.findById(userID);
-
-        if( exitUser!==currUser && exitUser){
-            return res.status(200).json({
-                success:false,
-                message:"user already exists with this email",
-            });
-        }
-
         const newUser = await User.findByIdAndUpdate(userID, {username,email},{new:true});
 
         if( !newUser){
@@ -132,7 +122,7 @@ const editProfile = async (req, res) => {
     }
     catch(err){
         return res.status(200).json({
-            message:"server Error while edit user profile",
+            message: err.message,
             success:false
         });
     }
