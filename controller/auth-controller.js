@@ -105,9 +105,10 @@ const editProfile = async (req, res) => {
         const userID = req.userID;
         const {username, email} = req.body;
 
-        const exitUser = await User.find({email});
+        const exitUser = await User.findOne({email});
+        const currUser = await User.findById(userID);
 
-        if( exitUser){
+        if( exitUser!==currUser && exitUser){
             return res.status(200).json({
                 success:false,
                 message:"user already exists with this email",
