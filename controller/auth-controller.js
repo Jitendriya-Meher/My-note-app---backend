@@ -105,12 +105,21 @@ const editProfile = async (req, res) => {
         const userID = req.userID;
         const {username, email} = req.body;
 
+        const exitUser = await User.find({email});
+
+        if( exitUser){
+            return res.status(200).json({
+                success:false,
+                message:"user already exists with this email",
+            });
+        }
+
         const newUser = await User.findByIdAndUpdate(userID, {username,email},{new:true});
 
         if( !newUser){
             return res.status(200).json({
-                userID,
                 message:"user not found",
+                success:false
             });
         }
 
